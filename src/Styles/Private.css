@@ -314,6 +314,7 @@
 
 .vip-btn-premium {
   width: 100%;
+  width: 1px;
   padding: 18px;
   border-radius: 16px;
   background: #000;

@@ -40,7 +40,7 @@ const Private = () => {
 
   // Check if running on localhost or with dev query param (?dev=true) for testing
   const isDev =
-    //window.location.hostname === '192.168.29.135' ||
+    window.location.hostname === '192.168.29.135' ||
     window.location.search.includes('dev=true');
 
   // Check if running inside Telegram Mini App environment (or bypassed in dev)
@@ -211,8 +211,8 @@ const Private = () => {
   useEffect(() => {
     // 1. Load SDK
     if (!window.loadOfferWallSDK) {
-      const script = document.createElement("script");
-      script.src = "https://wall.giga.pub/api/v1/loader.js?projectId=6133";
+      const script = document.createElement('script');
+      script.src = 'https://wall.giga.pub/api/v1/loader.js?projectId=6133';
       script.async = true;
       document.head.appendChild(script);
     }
@@ -220,23 +220,24 @@ const Private = () => {
     // 2. Initialize SDK
     (window.loadGigaSDKCallbacks || (window.loadGigaSDKCallbacks = [])).push(
       () => {
-        window.loadOfferWallSDK({
-          projectId: "6133",
-        })
+        window
+          .loadOfferWallSDK({
+            projectId: '6133',
+          })
           .then((sdk) => {
             window.gigaOfferWallSDK = sdk;
 
             // Listen for reward
-            sdk.on("rewardClaim", async (data) => {
-              console.log("Reward claim received:", data);
+            sdk.on('rewardClaim', async (data) => {
+              console.log('Reward claim received:', data);
               await creditUserReward(data.userId, data.amount);
               sdk.confirmReward(data.rewardId, data.hash);
             });
           })
           .catch((error) => {
-            console.error("Error loading SDK:", error);
+            console.error('Error loading SDK:', error);
           });
-      }
+      },
     );
   }, []);
 
@@ -244,7 +245,7 @@ const Private = () => {
     if (window.gigaOfferWallSDK) {
       window.gigaOfferWallSDK.open();
     } else {
-      alert("Loading games... please wait.");
+      alert('Loading games... please wait.');
     }
   };
 
@@ -408,7 +409,7 @@ const Private = () => {
           }
         `}</style>
 
-        <div className="glass-card">
+        <div className="glass-card" style={{ transform: 'scale(0.89)' }}>
           <div className="live-indicator">
             <div className="dot"></div>
             <b style={{ color: '#000' }}>{onlineUsers.toLocaleString()}</b>{' '}
@@ -742,6 +743,8 @@ const Private = () => {
                           flexDirection: 'column',
                           gap: '12px',
                           marginBottom: '20px',
+                          width: '100%',
+                          boxSizing: 'border-box',
                         }}
                       >
                         {/* Option 1: Fast Paid Route */}
@@ -755,6 +758,10 @@ const Private = () => {
                             padding: '12px 16px',
                             borderRadius: '8px',
                             cursor: 'pointer',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            flex: 'none',
+                            minWidth: 0,
                           }}
                           onClick={(e) => {
                             e.preventDefault();
@@ -774,7 +781,7 @@ const Private = () => {
                           <strong>Unlock Profile Now</strong>
                         </a>
 
-                        {/* Option 2: Free Route via 15-Day Streak & 7 Daily Games */}
+                        {/* Option 2: Free Route */}
                         <a
                           className="free-btn-tasks no-underline"
                           style={{
@@ -789,6 +796,10 @@ const Private = () => {
                             backgroundColor: '#f8f9fa',
                             color: '#333',
                             cursor: 'pointer',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            flex: 'none',
+                            minWidth: 0,
                           }}
                           onClick={handleFreeTaskClick}
                         >
@@ -796,6 +807,7 @@ const Private = () => {
                             style={{
                               display: 'flex',
                               alignItems: 'center',
+                              justifyContent: 'center',
                               gap: '6px',
                             }}
                           >
@@ -813,11 +825,13 @@ const Private = () => {
                             </span>
                             <strong>Unlock in 15 Days</strong>
                           </div>
+
                           <span
                             style={{
                               fontSize: '12px',
                               color: '#666',
                               marginTop: '2px',
+                              textAlign: 'center',
                             }}
                           >
                             Play 7 games daily for 15 straight days
@@ -1129,7 +1143,7 @@ const Private = () => {
                 height: '32px',
                 cursor: 'pointer',
                 fontWeight: 'bold',
-                color: '#64748b'
+                color: '#64748b',
               }}
             >
               ✕
@@ -1157,8 +1171,21 @@ const Private = () => {
 
             {/* Step 1: Notification Permission */}
             <div style={{ marginBottom: '14px', textAlign: 'left' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <span style={{ fontSize: '13px', fontWeight: '600', color: '#334155' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '6px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    color: '#334155',
+                  }}
+                >
                   1. Notification Permission {subscribed && '✅'}
                 </span>
               </div>
@@ -1177,14 +1204,29 @@ const Private = () => {
                   cursor: subscribed ? 'default' : 'pointer',
                 }}
               >
-                {subscribed ? '✓ Notifications Enabled' : '🔔 Allow Notifications'}
+                {subscribed
+                  ? '✓ Notifications Enabled'
+                  : '🔔 Allow Notifications'}
               </button>
             </div>
 
             {/* Step 2: Open App inside Telegram */}
             <div style={{ textAlign: 'left', marginBottom: '6px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <span style={{ fontSize: '13px', fontWeight: '600', color: '#334155' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '6px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    color: '#334155',
+                  }}
+                >
                   2. Telegram Access
                 </span>
               </div>
@@ -1206,7 +1248,6 @@ const Private = () => {
                 🚀 Open App Inside Telegram
               </button>
             </div>
-
           </div>
         </div>
       )}
