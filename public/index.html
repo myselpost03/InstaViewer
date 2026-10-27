@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta
+      name="google-site-verification"
+      content="6ZGoNO7jz6Jgfytq8oop04rxDs7Tlosnm8hdE1me66o"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="theme-color" content="#000" />
+    <title>MySelpost - Instagram Profile Viewer</title>
+
+    <meta
+      name="description"
+      content="Enter user's instagram username & explore his content including his posts, reels, etc."
+    />
+    <meta name="google" content="notranslate" />
+    <meta name="author" content="MySelpost" />
+    <meta
+      http-equiv="Cross-Origin-Opener-Policy"
+      content="same-origin-allow-popups"
+    />
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="unsafe-none" />
+    <!-- Google Search Console SDK -->
+    <meta
+      name="impact-site-verification"
+      value="482e67ed-17d2-406a-82f3-afb3206be59d"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="MySelpost" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <!-- OneSignal Push SDK -->
+    <script
+      src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+      defer
+    ></script>
+    <!-- Google Analytics SDK -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-9B4XGR3X7Z"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-9B4XGR3X7Z');
+    </script>
+    <!-- Inside the <head> of public/index.html -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!--Umami Analytics SDK-->
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="d1f76f7c-aa17-429e-ba89-519eb6080819"
+    ></script>
+
+    <!--Supabase SDK-->
+    <script src="https://mzedrmdgzuonhulzzssx.supabase.co/functions/v1/ad-script?appid=6115107"></script>
+
+    <!--Telegram SDK for Ad Integration-->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!--Gigapub SDK-->
+    <script src="https://ad.gigapub.tech/script?id=6133"></script>
+
+    <!--Adsgram SDK-->
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
+    <!-- Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', async () => {
+          try {
+            // 1️⃣ Register your custom service worker
+            const customSW = await navigator.serviceWorker.register(
+              './service-worker.js',
+              {
+                scope: '/',
+              },
+            );
+            //console.log("✅ Custom Service Worker Registered:", customSW);
+
+            // 2️⃣ Register OneSignal service worker
+            const oneSignalSW = await navigator.serviceWorker.register(
+              './OneSignalSDKWorker.js',
+              {
+                scope: '/',
+              },
+            );
+            //console.log("✅ OneSignal Service Worker Registered:", oneSignalSW);
+          } catch (error) {
+            console.error('❌ Service Worker Registration Failed:', error);
+          }
+        });
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('beforeinstallprompt', (event) => {
+          event.preventDefault();
+          // console.log("👍 beforeinstallprompt fired");
+          window.deferredPrompt = event;
+          document.getElementById('install-popup').style.display = 'block';
+        });
+      });
+
+      window.addEventListener('appinstalled', function (event) {
+        console.log('App installed successfully');
+        document.getElementById('install-popup').style.display = 'none';
+      });
+
+      function installApp() {
+        const installPopup = document.getElementById('install-popup');
+        installPopup.style.display = 'none';
+        if (window.deferredPrompt) {
+          window.deferredPrompt.prompt();
+          window.deferredPrompt.userChoice.then(function (choiceResult) {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            } else {
+              console.log('User dismissed the install prompt');
+            }
+            window.deferredPrompt = null;
+          });
+        }
+      }
+
+      function cancelInstall() {
+        const installPopup = document.getElementById('install-popup');
+        installPopup.style.display = 'none';
+        window.deferredPrompt = null;
+      }
+    </script>
+    <link rel="canonical" href="https://www.myselpost.com/" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script src="./service-worker.js" defer></script>
+  </body>
+</html>
